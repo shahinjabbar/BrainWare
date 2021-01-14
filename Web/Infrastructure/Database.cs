@@ -5,18 +5,18 @@ using System.Web;
 
 namespace Web.Infrastructure
 {
+    using System.Configuration;
     using System.Data.Common;
     using System.Data.SqlClient;
 
     public class Database
     {
         private readonly SqlConnection _connection;
-
+        private readonly string _connectionString;
         public Database()
         {
             // var connectionString = "Data Source=LOCALHOST;Initial Catalog=BrainWare;Integrated Security=SSPI";
-            var mdf = @"C:\Brainshark\interview\BrainWare\Web\App_Data\BrainWare.mdf";
-            var connectionString = $"Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=BrainWAre;Integrated Security=SSPI;AttachDBFilename={mdf}";
+            var connectionString = ConfigurationManager.AppSettings["connectionString"].ToString();
 
             _connection = new SqlConnection(connectionString);
 
@@ -25,8 +25,6 @@ namespace Web.Infrastructure
 
         public DbDataReader ExecuteReader(string query)
         {
-           
-
             var sqlQuery = new SqlCommand(query, _connection);
 
             return sqlQuery.ExecuteReader();
